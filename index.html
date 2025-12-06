@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Professional Photo Gallery</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #f5f7fb;
+      color: #111827;
+      line-height: 1.6;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    header {
+      background: linear-gradient(135deg, #2563eb, #1d4ed8);
+      color: white;
+      padding: 20px 16px 24px;
+      box-shadow: 0 4px 12px rgba(15, 23, 42, 0.25);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 16px;
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .brand {
+      font-size: 1.25rem;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+    }
+
+    .tagline {
+      font-size: 0.9rem;
+      opacity: 0.95;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      border: none;
+      padding: 8px 14px;
+      border-radius: 999px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 500;
+      transition: transform 0.1s ease, box-shadow 0.1s ease, background 0.15s ease;
+      white-space: nowrap;
+    }
+
+    .btn-whatsapp {
+      background: #22c55e;
+      color: #022c22;
+      box-shadow: 0 4px 10px rgba(22, 163, 74, 0.35);
+    }
+
+    .btn-whatsapp:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 14px rgba(22, 163, 74, 0.45);
+    }
+
+    main {
+      padding: 24px 0 60px;
+    }
+
+    section {
+      margin-bottom: 40px;
+    }
+
+    h2.section-title {
+      font-size: 1.4rem;
+      margin-bottom: 16px;
+      color: #111827;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    h2.section-title span.icon {
+      font-size: 1.3rem;
+    }
+
+    /* Gallery */
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 14px;
+    }
+
+    .gallery-item {
+      background: white;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 4px 10px rgba(15, 23, 42, 0.08);
+      transition: transform 0.12s ease, box-shadow 0.12s ease;
+      cursor: pointer;
+    }
+
+    .gallery-item img {
+      width: 100%;
+      height: 150px;
+      object-fit: cover;
+      display: block;
+    }
+
+    .gallery-item:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 18px rgba(15, 23, 42, 0.18);
+    }
+
+    .gallery-caption {
+      padding: 8px 10px 10px;
+      font-size: 0.82rem;
+      color: #4b5563;
+      text-align: center;
+    }
+
+    /* Reviews */
+    .reviews-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 16px;
+    }
+
+    .review-card {
+      background: white;
+      border-radius: 16px;
+      padding: 14px 14px 16px;
+      box-shadow: 0 4px 10px rgba(15, 23, 42, 0.08);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .review-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .review-name {
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+
+    .review-stars {
+      color: #f59e0b;
+      font-size: 0.9rem;
+    }
+
+    .review-text {
+      font-size: 0.88rem;
+      color: #4b5563;
+    }
+
+    .review-tag {
+      font-size: 0.75rem;
+      color: #6b7280;
+      margin-top: 4px;
+    }
+
+    /* Support box */
+    .support-box {
+      background: #eff6ff;
+      border-radius: 18px;
+      padding: 16px 16px 18px;
+      border: 1px solid #bfdbfe;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .support-text {
+      max-width: 460px;
+      font-size: 0.9rem;
+      color: #1f2937;
+    }
+
+    .support-highlight {
+      font-weight: 600;
+      color: #1d4ed8;
+    }
+
+    /* Floating WhatsApp button */
+    .floating-whatsapp {
+      position: fixed;
+      bottom: 18px;
+      right: 16px;
+      z-index: 100;
+    }
+
+    .floating-whatsapp a {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 16px;
+      border-radius: 999px;
+      background: #22c55e;
+      color: #022c22;
+      font-weight: 600;
+      font-size: 0.9rem;
+      box-shadow: 0 8px 22px rgba(22, 163, 74, 0.55);
+      transition: transform 0.1s ease, box-shadow 0.1s ease, background 0.15s ease;
+    }
+
+    .floating-whatsapp a span.icon {
+      font-size: 1.2rem;
+    }
+
+    .floating-whatsapp a:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 26px rgba(22, 163, 74, 0.65);
+    }
+
+    footer {
+      text-align: center;
+      font-size: 0.8rem;
+      padding: 10px 16px 18px;
+      color: #6b7280;
+    }
+
+    @media (max-width: 640px) {
+      header {
+        padding-bottom: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Floating WhatsApp Button -->
+  <div class="floating-whatsapp">
+    <a href="https://wa.me/916376662787?text=Hi%2C%20I%20want%20to%20know%20more%20about%20your%20photo%20services."
+       target="_blank" rel="noopener">
+      <span class="icon">💬</span>
+      <span>WhatsApp Support</span>
+    </a>
+  </div>
+
+  <header>
+    <div class="container header-inner">
+      <div>
+        <div class="brand">Professional Photo Gallery</div>
+        <div class="tagline">Showcase of selected work with direct WhatsApp support</div>
+      </div>
+
+      <div class="header-actions">
+        <a class="btn btn-whatsapp"
+           href="https://wa.me/916376662787?text=Hi%2C%20I%20want%20to%20book%20your%20services."
+           target="_blank" rel="noopener">
+          <span>📞</span> Contact on WhatsApp
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <!-- GALLERY SECTION -->
+    <section id="gallery">
+      <h2 class="section-title">
+        <span class="icon">🖼️</span>
+        Portfolio Photos
+      </h2>
+      <p style="font-size:0.9rem; color:#4b5563; margin-bottom:12px;">
+        Click on any photo below to directly open WhatsApp chat with
+        <strong>+91 63766 62787</strong>.
+      </p>
+
+      <div class="gallery-grid">
+
+        <!-- NOTE:
+             Put your 20 images in a folder called "images"
+             and rename them like photo1.jpg, photo2.jpg, ... photo20.jpg
+             OR change the src paths below to match your actual file names.
+        -->
+
+        <!-- 1 to 20 photos -->
+        <a class="gallery-item"
+           href="https://wa.me/916376662787?text=Hi%2C%20I%20am%20interested%20in%20Photo%201."
+           target="_blank" rel="noopener">
+          <img src="images/photo1.jpg" alt="Client work photo 1" />
+          <div class="gallery-caption">Photo 1</div>
+        </a>
+
+        <a class="gallery-item"
+           href="https://wa.me/916376662787?text=Hi%2C%20I%20am%20interested%20in%20Photo%202."
+           target="_blank" rel="noopener">
+          <img src="images/photo2.jpg" alt="Client work photo 2" />
+          <div class="gallery-caption">Photo 2</div>
+        </a>
+
+        <a class="gallery-item"
+           href="https://wa.me/916376662787?text=Hi%2C%20I%20am%20interested%20in%20Photo%203."
+           target="_blank" rel="noopener">
+          <img src="images/photo3.jpg" alt="Client work photo 3" />
+          <div class="gallery-caption">Photo 3</div>
+        </a>
+
+        <a class="gallery-item"
+           href="https://wa.me/916376662787?text=Hi%2C%20I%20am%20interested%20in%20Photo%204."
+           target="_blank" rel="noopener">
+          <img src="images/photo4.jpg" alt="Client work photo 4" />
+          <div class="gallery-caption">Photo 4</div>
+        </a>
+
+        <a class="gallery-item"
+           href="https://wa.me/916376662787?text=Hi%2C%20I%20am%20interested%20in%20Photo%205."
+           target="_blank" rel="noopener">
+          <img src="images/photo5.jpg" alt="Client work photo 5" />
+          <div class="gallery-caption">Photo 5</div>
+        </a>
+
+        <a class="gallery-item"
+           href="https://wa.me/916376662787?text=Hi%2C%20I%20am%20interested%20in%20Photo%206."
+           target="_blank" rel="noopener">
+          <img src="images/photo6.jpg" alt="Client work photo 6" />
+          <div class="gallery-caption">Photo 6</div>
+        </a>
+
+        <a class="gallery-item"
+           href="https://wa.me/916376662787?text=Hi%2C%20I%20am%20interested%20in%20Photo%207."
+           target="_blank" rel="noopener">
+          <img src="images/photo7.jpg" alt="Client work photo 7" />
+          <div class="gallery-caption">Photo 7</div>
+        </a>
+
+        <a class="gallery-item"
+           href="https://wa.me/916376662787?text=Hi%2C%20I%20am%20interested%20in%20Photo%208."
+           target="_blank" rel="noopener">
+          <img src="images/photo8.jpg" alt="Client work photo 8" />
+          <div class="gallery-caption">Photo 8</div>
+        </a>
+
+        <a class="gallery-item"
+           href="https://wa.me/916376662787?text=Hi%2C%20I%20am%20interested%20in%20Photo%209."
+           target="_blank" rel="noopener">
+          <img src="images/photo9.jpg" alt="Client work photo 9" />
+          <div class="gallery-caption">Photo 9</div>
+        </a>
+
+        <a class="gallery-item"
+           href="https://wa.me/916376662787?text=Hi%2C%20I%20am%20interested%20in%20Photo%2010."
+           target="_blank" rel="noopener">
+          <img src="images/photo10.jpg" alt="Client work photo 10" />
+          <div class="gallery-caption">Photo 10</div>
+        </a>
+
+        <a class="gallery-item"
+           href="https://wa.me/916376662787?text=Hi%2C%20I%20am%20interested%20in%20Photo%2011."
+           target="_blank" rel="noopener">
+          <img src="images/photo11.jpg" alt="Client work photo 11" />
+          <div class="gallery-caption">Photo 11</div>
+        </a>
+
+        <a class="gallery-item"
+           href="https://wa.me/916376662787?text=Hi%2C%20I%20am%20interested%20in%20Photo%2012."
+           target="_blank" rel="noopener">
+          <img src="images/photo12.jpg" alt="Client work photo 12" />
+          <div class="gallery-caption">Photo 12</div>
+        </a>
+
+        <a class="gallery-item"
+           href="https://wa.me/916376662787?text=Hi%2C%20I%20am%20interested%20in%20Photo%2013."
+           target="_blank" rel="noopener">
+          <img src="images/photo13.jpg" alt="Client work photo 13" />
+          <div class="gallery-caption">Photo 13</div>
+        </a>
+
+        <a class="gallery-item"
+           href="https://wa.me/916376662787?text=Hi%2C%20I%20am%20interested%20in%20Photo%2014."
+           target="_blank" rel="noopener">
+          <img src="images/photo14.jpg" alt="Client work photo 14" />
+          <div class="gallery-caption">Photo 14</div>
+        </a>
+
+        <a class="gallery-item"
+           href="https://wa.me/916376662787?text=Hi%2C%20I%20am%20interested%20in%20Photo%2015."
+           target="_blank" rel="noopener">
+          <img src="images/photo15.jpg" alt="Client work photo 15" />
+          <div class="gallery-caption">Photo 15</div>
+        </a>
+
+        <a class="gallery-item"
+           href="https://wa.me/916376662787?text=Hi%2C%20I%20am%20interested%20in%20Photo%2016."
+           target="_blank" rel="noopener">
+          <img src="images/photo16.jpg" alt="Client work photo 16" />
+          <div class="gallery-caption">Photo 16</div>
+        </a>
+
+        <a class="gallery-item"
+           href="https://wa.me/916376662787?text=Hi%2C%20I%20am%20interested%20in%20Photo%2017."
+           target="_blank" rel="noopener">
+          <img src="images/photo17.jpg" alt="Client work photo 17" />
+          <div class="gallery-caption">Photo 17</div>
+        </a>
+
+        <a class="gallery-item"
+           href="https://wa.me/916376662787?text=Hi%2C%20I%20am%20interested%20in%20Photo%2018."
+           target="_blank" rel="noopener">
+          <img src="images/photo18.jpg" alt="Client work photo 18" />
+          <div class="gallery-caption">Photo 18</div>
+        </a>
+
+        <a class="gallery-item"
+           href="https://wa.me/916376662787?text=Hi%2C%20I%20am%20interested%20in%20Photo%2019."
+           target="_blank" rel="noopener">
+          <img src="images/photo19.jpg" alt="Client work photo 19" />
+          <div class="gallery-caption">Photo 19</div>
+        </a>
+
+        <a class="gallery-item"
+           href="https://wa.me/916376662787?text=Hi%2C%20I%20am%20interested%20in%20Photo%2020."
+           target="_blank" rel="noopener">
+          <img src="images/photo20.jpg" alt="Client work photo 20" />
+          <div class="gallery-caption">Photo 20</div>
+        </a>
+
+      </div>
+    </section>
+
+    <!-- REVIEWS SECTION -->
+    <section id="reviews">
+      <h2 class="section-title">
+        <span class="icon">⭐</span>
+        Client Reviews (5★ Rating)
+      </h2>
+
+      <div class="reviews-grid">
+        <!-- 10 reviews, all 5-star -->
+        <div class="review-card">
+          <div class="review-header">
+            <div class="review-name">Rahul Sharma</div>
+            <div class="review-stars">★★★★★</div>
+          </div>
+          <div class="review-text">
+            Amazing quality and very clean editing. The photos look sharp and professional.
+          </div>
+          <div class="review-tag">Verified Client</div>
+        </div>
+
+        <div class="review-card">
+          <div class="review-header">
+            <div class="review-name">Priya Verma</div>
+            <div class="review-stars">★★★★★</div>
+          </div>
+          <div class="review-text">
+            Great communication on WhatsApp and all changes were done quickly as requested.
+          </div>
+          <div class="review-tag">Repeat Customer</div>
+        </div>
+
+        <div class="review-card">
+          <div class="review-header">
+            <div class="review-name">Aman Jain</div>
+            <div class="review-stars">★★★★★</div>
+          </div>
+          <div class="review-text">
+            Very good work for a fair price. I will definitely work again in the future.
+          </div>
+          <div class="review-tag">Photo Editing Project</div>
+        </div>
+
+        <div class="review-card">
+          <div class="review-header">
+            <div class="review-name">Sneha Gupta</div>
+            <div class="review-stars">★★★★★</div>
+          </div>
+          <div class="review-text">
+            Fast delivery and modern look. Every photo was handled with attention to detail.
+          </div>
+          <div class="review-tag">Social Media Content</div>
+        </div>
+
+        <div class="review-card">
+          <div class="review-header">
+            <div class="review-name">Mohit Yadav</div>
+            <div class="review-stars">★★★★★</div>
+          </div>
+          <div class="review-text">
+            Very professional behavior and quick responses on WhatsApp. 5 stars!
+          </div>
+          <div class="review-tag">Brand Shoot</div>
+        </div>
+
+        <div class="review-card">
+          <div class="review-header">
+            <div class="review-name">Kritika Singh</div>
+            <div class="review-stars">★★★★★</div>
+          </div>
+          <div class="review-text">
+            Final results were even better than the samples. Highly recommended.
+          </div>
+          <div class="review-tag">Portfolio Work</div>
+        </div>
+
+        <div class="review-card">
+          <div class="review-header">
+            <div class="review-name">Vikas Mehta</div>
+            <div class="review-stars">★★★★★</div>
+          </div>
+          <div class="review-text">
+            Project completed on time and every small detail was taken care of.
+          </div>
+          <div class="review-tag">Business Client</div>
+        </div>
+
+        <div class="review-card">
+          <div class="review-header">
+            <div class="review-name">Anjali Rao</div>
+            <div class="review-stars">★★★★★</div>
+          </div>
+          <div class="review-text">
+            Friendly service and helpful support. WhatsApp made everything easy to discuss.
+          </div>
+          <div class="review-tag">Custom Design</div>
+        </div>
+
+        <div class="review-card">
+          <div class="review-header">
+            <div class="review-name">Rohit Patil</div>
+            <div class="review-stars">★★★★★</div>
+          </div>
+          <div class="review-text">
+            The photos look exactly how I imagined. Very clean and consistent editing.
+          </div>
+          <div class="review-tag">Event Photos</div>
+        </div>
+
+        <div class="review-card">
+          <div class="review-header">
+            <div class="review-name">Neha Kapoor</div>
+            <div class="review-stars">★★★★★</div>
+          </div>
+          <div class="review-text">
+            From first message to final delivery, the whole process was smooth and professional.
+          </div>
+          <div class="review-tag">Long-term Client</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SUPPORT SECTION -->
+    <section id="support">
+      <h2 class="section-title">
+        <span class="icon">📞</span>
+        Support & Contact
+      </h2>
+
+      <div class="support-box">
+        <div class="support-text">
+          For any questions about the photos, services, pricing or new projects,
+          you can contact directly on WhatsApp.
+          <span class="support-highlight">Support Number: +91 63766 62787</span><br />
+          Click the button here, the floating WhatsApp icon, or any photo in the gallery –
+          all will open the same WhatsApp chat.
+        </div>
+
+        <a class="btn btn-whatsapp"
+           href="https://wa.me/916376662787?text=Hi%2C%20I%20would%20like%20to%20discuss%20a%20project%20with%20you."
+           target="_blank" rel="noopener">
+          <span>💬</span> Start WhatsApp Chat
+        </a>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    © 2025 • Professional Photo Gallery • All rights reserved.
+  </footer>
+
+</body>
+</html>
