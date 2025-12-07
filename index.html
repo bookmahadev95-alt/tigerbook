@@ -10,6 +10,23 @@
       margin: 0;
       padding: 0;
     }
+    
+    /* Auto zoom animation for ALL images on website */
+img {
+  animation: zoomInOut 6s ease-in-out infinite alternate;
+  transform-origin: center center;
+  will-change: transform;
+}
+
+/* Keyframes for zoom effect */
+@keyframes zoomInOut {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.08); /* Zoom amount – 1.05/1.1 as per your choice */
+  }
+}
 
     body {
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
@@ -606,6 +623,7 @@
 
 </body>
 </html>
+
 
 
 
