@@ -4,7 +4,19 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Professional Photo Gallery</title>
+
+  <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-CZFXPKVRWM"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-CZFXPKVRWM');
+</script>
+
   <style>
+
     * {
       box-sizing: border-box;
       margin: 0;
@@ -618,11 +630,43 @@ img {
   </main>
 
   <footer>
-    © 2025 • Professional Photo Gallery • All rights reserved.
-  </footer>
+     © 2025 • Professional Photo Gallery • All rights reserved.
+    </footer>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  // All WhatsApp links
+  const waLinks = document.querySelectorAll('a[href^="https://wa.me/916376662787"]');
+
+  waLinks.forEach((link, index) => {
+    link.addEventListener("click", function () {
+      if (typeof gtag === "function") {
+        gtag("event", "whatsapp_click", {
+          event_category: "engagement",
+          event_label: "whatsapp_link_" + (index + 1)
+        });
+      }
+    });
+  });
+
+  // All image clicks
+  const images = document.querySelectorAll("img");
+
+  images.forEach((img, index) => {
+    img.addEventListener("click", function () {
+      if (typeof gtag === "function") {
+        gtag("event", "image_click", {
+          event_category: "gallery",
+          event_label: "image_" + (index + 1)
+        });
+      }
+    });
+  });
+});
+</script>
 
 </body>
 </html>
+
 
 
 
